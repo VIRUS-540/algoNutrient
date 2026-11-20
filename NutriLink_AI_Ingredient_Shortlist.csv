@@ -1,0 +1,8 @@
+Ingredient,Food_Name,Protein_g,Fat_g,Fibre_g,Energy_kcal,Source,Source_Record_ID,Selection_Reason
+Cowpea,"Cowpea, mature, whole, dried, raw (Nigeria)",23.501383914870292,1.8966272619047622,10.839566333333332,332.24367059118543,FAO/INFOODS uPulses 1.0,VUN002,Nigerian record
+Bambara groundnut,"Bambara groundnut, dry, raw",19.5,5.9,28.9,323.0,FAO/INFOODS Western Africa Food Composition Table 2019,03_001,Western Africa table record
+Pigeon pea,"Pigeon pea, mature, whole, dried, raw (Nigeria)",21.519061,2.258395066666666,20.950813333333333,307.1453636666667,FAO/INFOODS uPulses 1.0,CAC002,Nigerian record
+African yam bean,"African yam bean, dry, raw",20.5,1.5,16.7,316.0,FAO/INFOODS Western Africa Food Composition Table 2019,03_010,Western Africa table record
+Soya bean,"Soya bean, dry, raw",31.3,17.0,23.4,381.0,FAO/INFOODS Western Africa Food Composition Table 2019,03_008,Western Africa table record
+Sesame,"Sesame seed, whole, dried, raw",16.6,54.1,14.3,601.0,FAO/INFOODS Western Africa Food Composition Table 2019,06_015,Western Africa table record
+Lentil,"Lentil, dry, raw",23.6,1.7,17.0,328.0,FAO/INFOODS Western Africa Food Composition Table 2019,03_030,Western Africa table record

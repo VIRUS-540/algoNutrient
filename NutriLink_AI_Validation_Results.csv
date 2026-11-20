@@ -1,0 +1,4 @@
+Target_Protein_g,Actual_Protein_g,Total_Weight_g,Protein_Target_Met,Weight_Constraint_Met,Maximum_Ingredient_g,Ingredient_Constraint_Met
+20,22.36006355926719,100.00000000000001,True,True,14.285714285714286,True
+23,22.999999999999993,100.0,True,True,18.74520616857601,True
+25,24.999999999928676,100.0,True,True,32.68250785882919,True
