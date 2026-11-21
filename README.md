@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
@@ -38,3 +39,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 =======
 # Nutrilink_AI
 >>>>>>> 25d87b838e9434f64f969bf4d21150cce127820b
+=======
+# algoNutrient
+>>>>>>> 91210ba3b5beba84a467914b6af4592c7d01fa73

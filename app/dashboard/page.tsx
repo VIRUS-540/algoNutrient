@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import NutrientChatbot from "@/components/NutrientChatbot";
+import GoAltProSection from "@/components/GoAltProSection";
+import NutritionCalculator from "@/components/nutrition/NutritionCalculator";
 
 interface UserProfile {
   firstName: string;
@@ -18,7 +20,7 @@ interface UserProfile {
   healthConditions: string;
 }
 
-type TabOption = "profile" | "diet-plan" | "health-tips";
+type TabOption = "profile" | "diet-plan" | "health-tips" | "go-altpro" | "nutrition";
 
 const GOAL_LABELS: Record<string, string> = {
   "fat-loss": "Sustainable Fat Loss & Body Recomposition",
@@ -39,6 +41,13 @@ export default function DashboardPage() {
       setUser(JSON.parse(saved));
     } else {
       router.push("/login");
+    }
+
+    // Check if redirected from another page (like Tutorials) requesting a specific tab
+    const preferredTab = localStorage.getItem("preferredDashboardTab") as TabOption | null;
+    if (preferredTab) {
+      setActiveTab(preferredTab);
+      localStorage.removeItem("preferredDashboardTab");
     }
   }, [router]);
 
@@ -76,6 +85,12 @@ export default function DashboardPage() {
     user.genotype
   );
 
+  // Check if user has lactose or dairy allergies
+  const isLactoseIntolerant =
+    user.allergies?.toLowerCase().includes("lactose") ||
+    user.allergies?.toLowerCase().includes("dairy") ||
+    user.allergies?.toLowerCase().includes("milk");
+
   return (
     <div className="min-h-screen bg-[#F3EEDF] text-[#244B38] font-sans selection:bg-[#C69A55] selection:text-white">
       {/* Updated Dashboard Navigation Bar */}
@@ -90,7 +105,7 @@ export default function DashboardPage() {
             </span>
           </Link>
 
-          {/* Navigation Tabs: Profile, Diet Plan, Fitness & Health Tips */}
+          {/* Navigation Tabs: Profile, Diet Plan, Fitness & Health Tips, Go AltPro, AI Calculator */}
           <nav className="flex items-center gap-1 rounded-full border border-[#A8B99A]/40 bg-white/80 p-1 shadow-xs">
             <button
               onClick={() => setActiveTab("profile")}
@@ -121,6 +136,26 @@ export default function DashboardPage() {
               }`}
             >
               Fitness &amp; Health Tips
+            </button>
+            <button
+              onClick={() => setActiveTab("nutrition")}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all cursor-pointer ${
+                activeTab === "nutrition"
+                  ? "bg-[#244B38] text-white shadow-xs"
+                  : "text-[#52765A] hover:text-[#244B38]"
+              }`}
+            >
+              AI Calculator
+            </button>
+            <button
+              onClick={() => setActiveTab("go-altpro")}
+              className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all cursor-pointer ${
+                activeTab === "go-altpro"
+                  ? "bg-[#C69A55] text-[#244B38] font-semibold shadow-xs"
+                  : "text-[#52765A] hover:text-[#244B38]"
+              }`}
+            >
+              Go AltPro
             </button>
           </nav>
 
@@ -225,6 +260,30 @@ export default function DashboardPage() {
               ))}
             </div>
 
+            {/* Added: Tutorials Quick-Access Navigation Card */}
+            <div className="rounded-3xl border border-[#C69A55]/40 bg-gradient-to-br from-white via-[#F3EEDF]/40 to-[#C69A55]/10 p-6 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div className="space-y-1">
+                <span className="inline-block rounded-full bg-[#C69A55]/20 px-3 py-1 text-xs font-semibold text-[#C69A55] uppercase tracking-wider">
+                  Learning Resource
+                </span>
+                <h3 className="text-xl font-bold text-[#244B38]">
+                  Alternative Protein Tutorials Hub
+                </h3>
+                <p className="text-sm text-[#52765A] max-w-xl">
+                  Explore practical video guides, preparation tutorials, storage best practices, and cooking tips for local alternative protein crops.
+                </p>
+              </div>
+              <Link
+                href="/tutorials"
+                className="inline-flex items-center justify-center gap-2 rounded-2xl bg-[#244B38] px-6 py-3.5 text-sm font-semibold text-white transition-all hover:bg-[#1b382a] shadow-md shrink-0 cursor-pointer"
+              >
+                <span>Browse Tutorials</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </Link>
+            </div>
+
             {/* Allergies & Health Conditions Cards */}
             <div className="grid gap-6 md:grid-cols-2">
               <div className="rounded-2xl border border-[#A8B99A]/35 bg-white p-6 shadow-xs">
@@ -263,15 +322,15 @@ export default function DashboardPage() {
           <div className="space-y-6">
             <div>
               <h2 className="text-xl font-bold text-[#244B38]">
-                Calibrated Daily Nutrition Blueprint
+                Calibrated African Nutrition &amp; Plant Protein Blueprint
               </h2>
               <p className="mt-1 text-sm text-[#52765A]">
-                Tailored to your {user.weight}kg body weight, {user.bloodGroup}{" "}
-                blood group, and{" "}
+                Tailored to your {user.weight}kg body weight, {user.genotype}{" "}
+                genotype, and{" "}
                 {user.allergies?.trim()
                   ? `excluding ${user.allergies}`
                   : "whole-food nutrient density"}
-                .
+                . Featuring high-value African plant proteins.
               </p>
             </div>
 
@@ -285,7 +344,7 @@ export default function DashboardPage() {
                   {proteinTarget}g
                 </p>
                 <p className="mt-1 text-xs text-[#52765A]">
-                  Supports tissue repair &amp; metabolic rate
+                  Powered by legumes, seeds, fish &amp; lean poultry
                 </p>
               </div>
               <div className="rounded-2xl border border-[#A8B99A]/35 bg-white p-6 shadow-xs">
@@ -296,7 +355,7 @@ export default function DashboardPage() {
                   {carbsTarget}g
                 </p>
                 <p className="mt-1 text-xs text-[#52765A]">
-                  Sustained glycogen &amp; cellular energy
+                  Unripe plantain, yam, brown/ofada rice, sweet potato
                 </p>
               </div>
               <div className="rounded-2xl border border-[#A8B99A]/35 bg-white p-6 shadow-xs">
@@ -307,43 +366,44 @@ export default function DashboardPage() {
                   {fatsTarget}g
                 </p>
                 <p className="mt-1 text-xs text-[#52765A]">
-                  Hormonal balance &amp; fat-soluble vitamins
+                  Cold-pressed palm oil, melon seeds, avocado &amp; tiger nuts
                 </p>
               </div>
             </div>
 
-            {/* Meal Schedule */}
+            {/* African Meal Schedule with Plant-Protein Alternates & Allergy Safety */}
             <div className="grid gap-5 md:grid-cols-2">
               {[
                 {
                   meal: "Breakfast • 07:30 AM",
-                  title: "Folate & Iron-Rich Morning Bowl",
+                  title: "High-Protein Moi-Moi or Akara Bowl",
                   items:
-                    "Oatmeal cooked with chia seeds, boiled eggs, sautéed spinach, and sliced papaya.",
+                    "Steamed or baked bean pudding (Moi-Moi made from peeled cowpeas/brown beans enriched with fluted pumpkin leaves) served with boiled eggs or sliced ripe pawpaw.",
                   note: isSickleTraitOrCondition
-                    ? "High folate & hydration focus tailored for your genotype."
-                    : "Slow-release energy for steady morning focus.",
+                    ? "Rich in plant folate, iron, and slow-release legume amino acids."
+                    : "Packed with clean plant protein and stable morning energy.",
                 },
                 {
                   meal: "Lunch • 01:00 PM",
-                  title: "Lean Protein & Complex Fiber Plate",
+                  title: "Ofada Rice & African Yam Bean (Fio-Fio) Stew",
                   items:
-                    "Grilled chicken breast or mackerel, brown rice or unripe plantain, steamed okra, and mixed greens.",
-                  note: "Balanced glycemic load to prevent afternoon fatigue.",
+                    "Local Ofada rice paired with a nutrient-dense African Yam Bean stew or mackerel fish stew heavily loaded with steamed ugwu (pumpkin leaves) and spinach.",
+                  note: "African yam beans provide exceptionally high plant protein and dense minerals.",
                 },
                 {
                   meal: "Afternoon Snack • 04:30 PM",
-                  title: "Micronutrient Recovery Boost",
-                  items:
-                    "Greek yogurt or tiger nut milk with roasted pumpkin seeds and cucumber slices.",
-                  note: "Replenishes magnesium, zinc, and electrolytes.",
+                  title: "Tiger Nut (Ofio) & Bambara Groundnut Boost",
+                  items: isLactoseIntolerant
+                    ? "Freshly blended tiger nut milk (100% dairy-free) served alongside roasted Bambara groundnuts (Okpa seeds) or tiger nut chunks."
+                    : "Tiger nut milk or plant-based coconut milk served with roasted Bambara groundnuts and tiger nut chunks.",
+                  note: "Bambara nuts are a complete-profile African legume packed with magnesium and zinc.",
                 },
                 {
                   meal: "Dinner • 07:30 PM",
-                  title: "Light Anti-Inflammatory Evening Meal",
+                  title: "Catfish Pepper Soup & Plantain Mash",
                   items:
-                    "Baked tilapia with ginger-garlic herbs, roasted sweet potatoes, and steamed broccoli.",
-                  note: "Easy digestion to support overnight recovery.",
+                    "Fresh catfish pepper soup spiced with local herbs (Ehuru, Uda) served with boiled unripe plantain or mashed yam.",
+                  note: "Light, highly digestible evening meal rich in omega-3 fatty acids and low glycemic carbs.",
                 },
               ].map((slot) => (
                 <div
@@ -463,6 +523,24 @@ export default function DashboardPage() {
             </div>
           </div>
         )}
+
+        {/* TAB 4: AI NUTRITION CALCULATOR VIEW */}
+        {activeTab === "nutrition" && (
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-bold text-[#244B38]">
+                Personalized AI Protein &amp; Nutrition System
+              </h2>
+              <p className="mt-1 text-sm text-[#52765A]">
+                Estimate your daily protein requirements and explore calibrated African plant-protein recommendations.
+              </p>
+            </div>
+            <NutritionCalculator />
+          </div>
+        )}
+
+        {/* TAB 5: GO ALTPRO MAP VIEW */}
+        {activeTab === "go-altpro" && <GoAltProSection />}
       </main>
 
       {/* Integrated Floating AI Chatbot */}
